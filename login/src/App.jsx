@@ -4,7 +4,7 @@ import axios from 'axios';
  
 export default function LoginForm() {
  const [info,setInfo]=useState({})
-  const Handelform=(e)=>{
+  const Handelform=async(e)=>{
     e.preventDefault()
    const formData = new FormData(e.target);
   
@@ -14,11 +14,12 @@ export default function LoginForm() {
     }
     setInfo(logInfo)
    try{
-      const res=axios.post("http://localhost:3200/register/info",logInfo)
-       res=>console.log("data sended"+ res)
+      const res=await axios.post("http://localhost:3200/register/info",logInfo)
+      
        alert("data sended")
-   }catch{
-    alert(res.body.message)
+   }catch(error){
+    console.error("Error details:", error.response?.data || error.message);
+      alert("Error: " + (error.response?.data?.message || "Server connection failed"));
    }
     
   

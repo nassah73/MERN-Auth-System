@@ -1,7 +1,7 @@
 const express =require('express')
 const  app=express()
 const {hash}=require('bcrypt')
-const Info=require('./Info.model')
+const Infor=require('./Info.model')
 const mongoose=require("mongoose")
 const cors = require('cors');
 app.use(cors())
@@ -10,18 +10,18 @@ const mongoUrl="mongodb://localhost:27017/login-logic"
 app.post('/register/info', async (req, res) => {
     try {
         const {email,password}=req.body;
-        const user=await Info.find(user=>user.email=email)
-        if(user) return res.status(500).json({messge:"user already exist"})
+        const userExist = await Infor.findOne({ email: email });
+        if(user) return res.status(400).json({messge:"user already exist"})
         const hashpassword= await hash(password,10)
-        const info = await Info.create({
+        const info = await Infor.create({
             email,
             password:hashpassword
         });
         
         res.status(200).json(info); 
         
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    } catch (err) {
+        res.status(500).json({ message:"probleme in regirter" });
     }
 })
 
