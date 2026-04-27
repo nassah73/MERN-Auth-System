@@ -1,23 +1,35 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import axios from 'axios';
+ 
 export default function LoginForm() {
-  const [info,setInfo]=useState({})
-  const Handelform=(formData)=>{
-    
-    const email=formData.get("email")
-    const password=formData.get("password")
+ const [info,setInfo]=useState({})
+  const Handelform=(e)=>{
+    e.preventDefault()
+   const formData = new FormData(e.target);
+  
     const logInfo={
-      email:email,
-      password:password,
+      email:formData.get('email'),
+      password:formData.get('password'),
     }
     setInfo(logInfo)
+   try{
+      const res=axios.post("http://localhost:3200/register/info",logInfo)
+       res=>console.log("data sended"+ res)
+       alert("data sended")
+   }catch{
+    alert(res.body.message)
+   }
+    
+  
+  
+  
+  
+}
+  
 
-     axios.post("http://localhost:3200/login/info",logInfo)
-  .then(res=>console.log("data sended"+ res))
-  .catch(err=>console.log(err+" errer"))
-  }
- 
+  
+
  
  
   return (
@@ -32,7 +44,7 @@ export default function LoginForm() {
         </div>
 
         
-        <form className="p-8 space-y-6" action={Handelform}>
+        <form className="p-8 space-y-6" onSubmit={Handelform}>
           
           
           <div className="space-y-2">
